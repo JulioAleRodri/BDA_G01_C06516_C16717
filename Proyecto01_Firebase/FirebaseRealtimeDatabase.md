@@ -48,7 +48,7 @@ cómo podrías ofrecer una solución que responda a esa necesidad.
 
 ## ¿Y cómo se modela?
 
-==**Nota: Esta sección se centra en la utilización de Firebase Realtime Database en aplicaciones web**==
+**Nota: Esta sección se centra en la utilización de Firebase Realtime Database en aplicaciones web**
 
 A diferencia de SQL, las bases de datos noSQL no cuentan con una manera estandarizada de modelar, siendo que Firebase Realime Database se basa en un **arbol JSON** [[E]](#RefE).
 
@@ -66,15 +66,15 @@ a crecer, y no guardan información o estructuras complejas [[F]](#RefF).
 
 ~~~json
 {
-	"usuarios": {
-        "usuario1": {
-		    "nombre": "Omar",
-		    "apellido": "Sanchez"
-		    "pais": "Costa Rica",
-		    "provincia": "Heredia",
-		    "canton": "San Rafael"
-	    }
-    }
+  "usuarios": {
+    "usuario1": {
+      "nombre": "Omar",
+      "apellido": "Sanchez",
+      "pais": "Costa Rica",
+      "provincia": "Heredia",
+      "canton": "San Rafael"
+	}
+  }
 }
 ~~~
 
@@ -98,10 +98,10 @@ Un ejemplo de la utilización de una subcolección se muestra a continuación:
   "usuarios": {
     "usuario1": {
       "nombre": "Omar",
-		"apellido": "Sanchez"
-		"pais": "Costa Rica",
-		"provincia": "Heredia",
-		"canton": "San Rafael"
+      "apellido": "Sanchez",
+      "pais": "Costa Rica",
+      "provincia": "Heredia",
+      "canton": "San Rafael",
       "contactos": {
         "contacto1": {
           "nombre": "Luis",
@@ -150,9 +150,53 @@ Un ejemplo de cómo usar esta estructuración se muestra a continuación:
 
 ~~~
 
+## ¿Y cómo hago consultas?
+
+**Nota: Esta sección se centra en la utilización de Firebase Realtime Database en aplicaciones web**
+
+De la misma manera en la que no existe un modelo específico para noSQL ni para Firebase Realtime Database, no existe un lenguaje específico u homogeneo 
+para realizar consultas, no al menos de la manera en la que estamos acostumbrados con SQL. Además, la técnica o código utilizado para realizar consultas 
+puede variar dependiendo de cuál herramienta, tecnología o lenguaje de programación se esté utilizando, siendo que en este caso se darán los ejemplo para 
+aplicaciones web, utilizando `javascript`.
+
+### Obtener la referencia a la base de datos
+
+Como esencial primer paso, debemos obtener la referencia a la base de datos que nos permita manipular y realizar consultas en la misma [[G]](#RefG).
+Esto se consigue fácilmente de la siguiente manera:
+
+~~~js
+import { getDatabase } from "firebase/database";
+
+const MyBeautifulDatabase = getDatabase();
+~~~
+
+### Escribir datos
+
+Ahora a lo interesante, para escribir primeramente necesitaremos contar con la referencia a la base de datos y saber que la información se obtiene de manera 
+asíncrona, sumado a que se obtiene la información al iniciar y cada vez que este cambia.
+
+La manera más básica para escribir es utilizando la función `set()`, la cuál requiere saber cuál es la ruta dentro del árbol a la colección que deseamos modificar. 
+Por ejemplo, si deseamos añadir un nuevo usuario llamado "Omar" con su información a la base de datos, simplemente se puede utilizar el siguiente código:
+
+~~~js
+import { getDatabase } from "firebase/database";
+
+const MyDatabase = getDatabase();
+
+set(ref(MyDatabase, 'usuarios/1234567890'), {
+  usuario: "Omar",
+  apellido: "Sanchez",
+  "pais": "Costa Rica"
+});
+~~~
+
+Es importante destacar que el elemento `usuarios/1234567890` representa la ruta al ID del dato, donde "1234567890" es el identificador que se utiliza para 
+interactuar con ese dato en el programa; Siendo que podría ser cualquier valor generado por el programa o definido según lo que se desee. 
+Además, se recomienda extraer esta lógica a una función que pueda ser reutilizable.
+
 ## Referencias
 
-[A] S.Melendez, "*Sometimes You’re Just One Hop From Something Huge*", Fast Company, May 27, 2014. [En línea]. Disponible en <span id="RefA"> https://www.fastcompany.com/3031109/sometimes-youre-just-one-hop-from-something-huge </span>
+[A] S.Melendez, "*Sometimes You're Just One Hop From Something Huge*", Fast Company, May 27, 2014. [En línea]. Disponible en <span id="RefA"> https://www.fastcompany.com/3031109/sometimes-youre-just-one-hop-from-something-huge </span>
 
 [B] M. Lehenbauer, "*Developers, meet Firebase!*", The Firebase Blog, Abr 12, 2014. [En línea]. Disponible en <span id="RefB"> https://firebase.blog/posts/2012/04/developers-meet-firebase </span>
 
@@ -163,3 +207,5 @@ Un ejemplo de cómo usar esta estructuración se muestra a continuación:
 [E] Firebase, "*Structure Your Database*", Firebase.com. [En línea]. Disponible en <span id="RefE"> https://firebase.google.com/docs/database/web/structure-data </span>. [Accedido: Sep. 1, 2024].
 
 [F] Firebase, "*Choose a data structure*", Firebase.com. [En línea]. Disponible en <span id="RefF"> https://firebase.google.com/docs/firestore/manage-data/structure-data </span>. [Accedido: Sep. 1, 2024].
+
+[G] Firebase, "*Read and Write Data on the Web*", Firebase.com. [En línea]. Disponible en <span id="RefG"> https://firebase.google.com/docs/database/web/read-and-write#web </span>. [Accedido: Sep. 1, 2024].
