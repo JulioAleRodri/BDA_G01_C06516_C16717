@@ -172,10 +172,12 @@ const MyBeautifulDatabase = getDatabase();
 
 ### Escribir datos
 
+#### Escritura básica
+
 Ahora a lo interesante, para escribir primeramente necesitaremos contar con la referencia a la base de datos y saber que la información se obtiene de manera 
 asíncrona, sumado a que se obtiene la información al iniciar y cada vez que este cambia.
 
-La manera más básica para escribir es utilizando la función `set()`, la cuál requiere saber cuál es la ruta dentro del árbol a la colección que deseamos modificar. 
+La manera más básica para escribir es utilizando la función `set()`, la cuál requiere saber cuál es la ruta dentro del árbol a la colección que deseamos modificar  [[G]](#RefG).
 Por ejemplo, si deseamos añadir un nuevo usuario llamado "Omar" con su información a la base de datos, simplemente se puede utilizar el siguiente código:
 
 ~~~js
@@ -193,6 +195,141 @@ set(ref(MyDatabase, 'usuarios/1234567890'), {
 Es importante destacar que el elemento `usuarios/1234567890` representa la ruta al ID del dato, donde "1234567890" es el identificador que se utiliza para 
 interactuar con ese dato en el programa; Siendo que podría ser cualquier valor generado por el programa o definido según lo que se desee. 
 Además, se recomienda extraer esta lógica a una función que pueda ser reutilizable.
+
+### Leer datos
+
+#### Escuchar eventos para obtener datos
+
+En este caso se creará un escuchador o "*observer*" que va a obtener los datos de una dirección en 
+específico; Siendo que una vez se empieza a escuchar, se realizar un lectura de los datos la primera 
+vez y cada vez que la información cambie, por lo que se mantiene la información actualizada. 
+Esto se puede realizar por medio de la operación `onValue()` y lo que se obtiene es una "*snapshot*" 
+de los datos de la dirección y de todos sus hijos incluidos. En el caso de que la información no exista, 
+al realizar la operación `val()`, esta devuelve `null` [[G]](#RefG).
+
+~~~js
+import { getDatabase } from "firebase/database";
+
+const MyDatabase = getDatabase();
+
+const lastMesagge = ref(MyDatabase, 'messages/' + someID + '/lastMesagge');
+
+onValue(lastMesagge, (snapshot) => {
+  const data = snapshot.val();
+  updateLastMesagge(someUser, data);
+});
+~~~
+
+Nótese que `someID`, `someUser` y `updateLastMessage()` son valores utilizados de ejemplo, el primero 
+hace referencia al ID para identificar al usuario en la estructura del árbol, el segundo al propio usuario 
+en la aplicación web y el tercero es una función para actualizar el último mensaje del usuario.
+
+Además, se recomienda obtener el nivel más bajo para obtener la información necesaria, dado que se obtiene 
+toda la información de los "nodos hijos", lo que podría implicar traer información que no se utilizará 
+o descargar una gran cantidad de información innecesaria, por lo que siempre se debe tratar de obtener solo 
+la información que se requiera.
+
+#### Leer datos una sola vez
+
+Se puede una única vez la información con la operación `get()`, pero esto no se recomienda, 
+dado que aumenta la utilización de la red y disminuye la eficiencia (Además de que sale más caro para la billetera). 
+Al utilizar `get()` no se aprovecha las cualidades de respuesta a tiempo real de Firebase 
+y no está tan optimizada para funcionar sin no existe conexión [[G]](#RefG).
+
+~~~js
+import { getDatabase } from "firebase/database";
+
+const MyDatabase = getDatabase();
+
+get(child(MyDatabase, 'users/' + someID)).then((snapshot) => {
+  if(snapshot.exist()) {
+    doSomething(snapshot.val());
+  } else {
+    manageNoExist(snapshot.val());
+  }
+}).catch((error) => {
+  manageError(error);
+});
+~~~
+
+#### Leer datos una sola vez con un observador
+
+Por otro lado, se puede utilizar la opciones `once()` o `onlyOnce: true` para obtener información que se encuentra 
+en el caché, de manera auntomática. Eso implica que, en lugar de obtener la información más reciente 
+de la base de datos, se utilizarán la información que se encuentre en la cahé del disco local.
+
+Esto puede ser de utilidad en el caso de que no se requiera los dato más recientes, dado que estos no cambien 
+tan frecuentemente o que no se necesiten [[G]](#RefG).
+
+~~~js
+import { getDatabase } from "firebase/database";
+
+const MyDatabase = getDatabase();
+
+const lastMesagge = ref(MyDatabase, 'messages/' + someID + '/lastMesagge');
+
+onValue(lastMesagge, (snapshot) => {
+  const data = snapshot.val();
+  updateLastMesagge(someUser, data);
+}, {
+  onlyOnce:true
+});
+~~~
+
+### Modificar o eliminar datos
+
+#### Modificar campos específicos
+
+Para esta sección es importante hacer una diferenciación, la operación `update()` 
+modifica el contenido de datos ya existentes, mientras que `push()` agrega nuevos 
+elementos a una lista ya existente y devuelve un ID único creado por la aplicación.
+
+Específicamente, `update()` puede modificar los valores de los "nodos hijos" que pertenecen a un nivel 
+menor, dada una llave específica que identifica al elemento. Este método puede editar varios elementos 
+al mismo tiempo con una sola consulta [[G]](#RefG). A continuación se muestra el funcionamiento de estas dos operaciones:
+
+~~~js
+import { getDatabase } from "firebase/database";
+
+function likePost(idUser, idPost, username) {
+  const MyDatabase = getDatabase();
+
+  const newPostLike = {
+    idPost: idPost,
+    idUser: idUser,
+    userWhoLikes: username
+  };
+
+  const newLikePostKey = push(child(ref(MyDatabase), 'posts')).key;
+
+  const updates = {};
+  
+  updates['/posts/' + idPost] = newPostLike;
+  updates['/users-likes/' + idUser] = newPostLike;
+
+  return update(ref(MyDatabase), updates);
+}
+~~~
+
+#### Eliminar datos
+
+Se puede eliminar algún dato de manera sencilla simplemente utilizando la operación `remove()`. 
+O se puede utiliar el `set()` o `update()` con `null` para sobreescribir el valor, lo cuál puede 
+ser útil si se desea eliminar varios "nodos hijos" con una sola llamada.
+
+~~~js
+import { getDatabase } from "firebase/database";
+
+const MyDatabase = getDatabase();
+
+const userRef = ref(MyDatabase, 'users/1234567890');
+
+remove(userRef).then(() => {
+  console.log("User remove");
+}).catch((error) => {
+  console.error("Can´t remove user:", error);
+});
+~~~
 
 ## Referencias
 

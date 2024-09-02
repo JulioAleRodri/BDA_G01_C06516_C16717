@@ -8,4 +8,5 @@ Julio Alejandro Rodríguez Salguera [Julio]
 
 | Estudiante		| Día			| Aporte
 | :---:				| :---:			| -----------
-| Julio				| 09/01/2024	| Se crea el repositorio, se responden las dos primeras preguntas de la actividad, se agregan algunas fuentes y se crea la bitácora
+| Julio				| 01/09/2024	| Se crea el repositorio, se responden las dos primeras preguntas de la actividad, se agregan algunas fuentes y se crea la bitácora
+| Julio				| 02/09/2024	| Se finaliza la sección de lenguaje utilizado en Firebase
