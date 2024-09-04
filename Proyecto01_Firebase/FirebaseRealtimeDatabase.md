@@ -66,12 +66,12 @@ a crecer, y no guardan información o estructuras complejas [[F]](#RefF).
 
 ~~~json
 {
-  "usuarios": {
-    "usuario1": {
-      "nombre": "Omar",
-      "apellido": "Sanchez",
-      "pais": "Costa Rica",
-      "provincia": "Heredia",
+  "users": {
+    "users1": {
+      "name": "Omar",
+      "lastName": "Sanchez",
+      "country": "Costa Rica",
+      "province": "Heredia",
       "canton": "San Rafael"
 	}
   }
@@ -95,21 +95,21 @@ Un ejemplo de la utilización de una subcolección se muestra a continuación:
 
 ~~~json
 {
-  "usuarios": {
-    "usuario1": {
-      "nombre": "Omar",
-      "apellido": "Sanchez",
-      "pais": "Costa Rica",
-      "provincia": "Heredia",
+  "users": {
+    "users1": {
+      "name": "Omar",
+      "lastName": "Sanchez",
+      "country": "Costa Rica",
+      "province": "Heredia",
       "canton": "San Rafael",
-      "contactos": {
-        "contacto1": {
-          "nombre": "Luis",
-          "telefono": "+50612345678",
+      "contacts": {
+        "contact1": {
+          "name": "Luis",
+          "phoneNumber": "+50612345678",
         },
-        "contacto2": {
-          "nombre": "Maria",
-          "telefono": "+50687654321",
+        "contact2": {
+          "name": "Maria",
+          "phoneNumber": "+50687654321",
         }
       }
     }
@@ -128,21 +128,21 @@ Un ejemplo de cómo usar esta estructuración se muestra a continuación:
 
 ~~~json
 {
-  "usuarios": {
-    "usuario1": {
-      "nombre": "Omar",
-	  "apellido": "Sanchez",
-	  "pais": "Costa Rica",
-	  "provincia": "Heredia",
+  "users": {
+    "users1": {
+      "name": "Omar",
+	  "lastName": "Sanchez",
+	  "country": "Costa Rica",
+	  "province": "Heredia",
       "canton": "San Rafael"
     }
   }
   "chats": {
     "chat1": {
-      "creador": "Omar",
-      "nombre": "Brave"
-      "participantes" {
-        "participante1": "Omar"
+      "autor": "Omar",
+      "name": "Brave"
+      "participants" {
+        "participants1": "Omar"
       }
     }
   }
@@ -181,7 +181,7 @@ La manera más básica para escribir es utilizando la función `set()`, la cuál req
 Por ejemplo, si deseamos añadir un nuevo usuario llamado "Omar" con su información a la base de datos, simplemente se puede utilizar el siguiente código:
 
 ~~~js
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 
 const MyDatabase = getDatabase();
 
@@ -208,7 +208,7 @@ de los datos de la dirección y de todos sus hijos incluidos. En el caso de que l
 al realizar la operación `val()`, esta devuelve `null` [[G]](#RefG).
 
 ~~~js
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 
 const MyDatabase = getDatabase();
 
@@ -237,7 +237,7 @@ Al utilizar `get()` no se aprovecha las cualidades de respuesta a tiempo real de
 y no está tan optimizada para funcionar sin no existe conexión [[G]](#RefG).
 
 ~~~js
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, child, get } from "firebase/database";
 
 const MyDatabase = getDatabase();
 
@@ -262,7 +262,7 @@ Esto puede ser de utilidad en el caso de que no se requiera los dato más recient
 tan frecuentemente o que no se necesiten [[G]](#RefG).
 
 ~~~js
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 
 const MyDatabase = getDatabase();
 
@@ -272,7 +272,7 @@ onValue(lastMesagge, (snapshot) => {
   const data = snapshot.val();
   updateLastMesagge(someUser, data);
 }, {
-  onlyOnce:true
+  onlyOnce: true
 });
 ~~~
 
@@ -289,7 +289,7 @@ menor, dada una llave específica que identifica al elemento. Este método puede e
 al mismo tiempo con una sola consulta [[G]](#RefG). A continuación se muestra el funcionamiento de estas dos operaciones:
 
 ~~~js
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, child, push, update } from "firebase/database";
 
 function likePost(idUser, idPost, username) {
   const MyDatabase = getDatabase();
@@ -315,10 +315,10 @@ function likePost(idUser, idPost, username) {
 
 Se puede eliminar algún dato de manera sencilla simplemente utilizando la operación `remove()`. 
 O se puede utiliar el `set()` o `update()` con `null` para sobreescribir el valor, lo cuál puede 
-ser útil si se desea eliminar varios "nodos hijos" con una sola llamada.
+ser útil si se desea eliminar varios "nodos hijos" con una sola llamada  [[G]](#RefG).
 
 ~~~js
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref, remove } from "firebase/database";
 
 const MyDatabase = getDatabase();
 
@@ -329,6 +329,103 @@ remove(userRef).then(() => {
 }).catch((error) => {
   console.error("Can´t remove user:", error);
 });
+~~~
+
+## ¿Existen estructuras o algoritmos?
+
+Como se mencionó anteriormente, la estructura utilizada en Firebase Realtime Database es un *árbol JSON*, 
+por lo que las relaciones que se crean son de "padre-hijo". De manera general, Firebase ofrece menos 
+opciones de estructuras y algoritmos en comparación con una base de datos relacional, pero sí existen 
+opciones interesantes
+
+### Listas
+
+Como su nombre indica, son una colección de datos relacionados a una referencia "padre"; Lo interesante 
+de esta estructura es que permite agregar nuevos datos utilizando la operación `push()`, que genera una llave 
+única para cada uno de los "hijos" agregados a la referencia. La operación `push()` permite a varios usuarios
+agregar datos de forma **paralela**, por lo que estas listas se pueden utilizar para datos que son modificados 
+constantemente por los usuarios [[H]](#RefH).
+
+~~~js
+import { getDatabase, ref, push, set } from "firebase/database";
+
+function sentMessage(chatId, userId, newMessage) {
+  const MyDatabase = getDatabase();
+  
+  const newChatMessage = push(ref(MyDatabase, 'chat-messages'))
+  
+  set(ref(newChatMessage, {
+    chat: chatId,
+    user: userId,
+    message: newMessage
+  })
+}
+~~~
+
+#### Escuchar cambios de los nodos hijos
+
+De la misma manera que existen "*triggers*" en las bases de datos relacionales, Firebase ofrece la opción 
+de escuchar eventos de los nodos hijos y reaccionar ante estos. Por ejemplo, si se agrega, elimina o modifica 
+un nodo hijo, se puede reaccionar cambiando la interfaz gráfica para que este cambio se refleje para el usuario [[H]](#RefH).
+
+~~~js
+import { getDatabase, ref, onChildAdded, onChildChanged, onChildRemoved } from "firebase/database";
+
+const MyDatabase = getDatabase();
+  
+const messagesRef = ref(MyDatabase, 'chat-messages/1234567890');
+
+onChildAdded(messagesRef, (data) => {
+  addMessageToChat(data.key, data.val().chatId, data.val().userId, data.val().message);
+});
+
+onChildUpdate(messagesRef, (data) => {
+  changeMessageFromChat(data.key, data.val().chatId, data.val().userId, data.val().message);
+});
+
+onChildDelete(messagesRef, (data) => {
+  deleteMessageToChat(data.key);
+});
+}
+~~~
+
+### Ordenadamiento y filtrado
+
+#### Ordenadamiento
+
+Se pueden realizar consultas ordenando los resultados dado una llave, un valor o hasta el valor de un nodo hijo, 
+utilizando las opciones de `orderByKey()`, `orderByValue()` y `orderByChild()` [[H]](#RefH).
+
+~~~js
+import { getDatabase, ref, query, orderByValue } from "firebase/database";
+
+const MyDatabase = getDatabase();
+  
+const userMessages = query(ref(MyDatabase, 'user-messages/1234567890'), orderByValue('message-date'));
+}
+~~~
+
+#### Fitrado
+
+En este caso se puede realizar un filtrado para solamente tomar los datos que cumplan con ciertas 
+características, además de que se puede combinar con el ordenamiento [[H]](#RefH). A continuación se presentan 
+algunas de las opciones para realizar el filtrado de datos:
+
+- `limitToFirst()`: Limita la cantidad de objetos obtenidos desde el inicio de la lista de resultados
+- `limitToLast()`: Limita la cantidad de objetos obtenidos desde el final de la lista de resultados
+- `startAt()` y `startAfter()`: El primero devuelve elementos mayores o iguales al valor especificado, 
+y el segundo devuelve elementos mayores, ambos según el método de ordenación elegido.
+- `endAt()` y `endBefore()`: El primero devuelve elementos menores o iguales al valor especificado, 
+y el segundo devuelve elementos menores, ambos según el método de ordenación elegido.
+- `equalTo()`: Devuelve una lista de elemento cuto valor sea igual al valor específico dado.
+
+~~~js
+import { getDatabase, ref, query, orderByValue } from "firebase/database";
+
+const MyDatabase = getDatabase();
+  
+const userMessages = query(ref(MyDatabase, 'user-messages/1234567890'), orderByValue('message-date'), limitToLast(25));
+}
 ~~~
 
 ## Referencias
@@ -346,3 +443,5 @@ remove(userRef).then(() => {
 [F] Firebase, "*Choose a data structure*", Firebase.com. [En línea]. Disponible en <span id="RefF"> https://firebase.google.com/docs/firestore/manage-data/structure-data </span>. [Accedido: Sep. 1, 2024].
 
 [G] Firebase, "*Read and Write Data on the Web*", Firebase.com. [En línea]. Disponible en <span id="RefG"> https://firebase.google.com/docs/database/web/read-and-write#web </span>. [Accedido: Sep. 1, 2024].
+
+[H] Firebase, "*Work with Lists of Data on the Web*", Firebase.como. [En línea]. Disponible en <span id="RefH"> https://firebase.google.com/docs/database/web/lists-of-data#web_4 </span>. [Accedido: Sep. 1, 2024].
