@@ -14,7 +14,7 @@ Julio Alejandro Rodríguez Salguera C16717
 
 ### Contexto
 
-Firebase Realtime Database es una base de datos NoSQL basada en la nube que sincroniza datos en tiempo real, permitiendo que la información de los usuarios se mantenga actualizada incluso cuando la aplicación se desconecta. Esta base de datos está alojada en la nube y almacena la información como documentos JSON, además de permitir compartir información en multiplataforma y realizar actualizaciones de los datos más recientes a tiempo real [[D]](#RefD).
+Firebase Realtime Database es una base de datos NoSQL basada en la nube que sincroniza datos en tiempo real, permitiendo que la información de los usuarios se mantenga actualizada incluso cuando la aplicación se desconecta. Esta base de datos está alojada en la nube y almacena la información como documentos [JSON](https://www.json.org/json-en.html), además de permitir compartir información en multiplataforma y realizar actualizaciones de los datos más recientes a tiempo real [[D]](#RefD).
 
 Esta plataforma ofrece las siguientes funcionalidades esenciales:
 
@@ -31,7 +31,7 @@ Sin embargo, Tamplin y Lee se encontraron con obstáculos al tratar de implement
 
 Posteriormente se dieron cuenta de que los usuarios y clientes de Envolve utilizaban Firebase para más que simples chats, pues, por ejemplo, lo usaban para intercambiar información a tiempo real de videojuegos en línea, como herramienta de colaboración, análisis de productos, entre otros propósitos [[B]](#RefB). En ese momento decidieron crear Firebase, para que brindara un servicio de base de datos en tiempo real y de esta manera solventar la necesidad que existía en el mercado [[A]](#RefA).
 
-En el año 2014 Firebase fue adquirida por Google, lo que permitió al servicio crecer en su infraestructura y alcance, además de colaborar con **Google Cloud Platform**, lo que les permitió a los usuarios utilizar los servicios en la nube de Google [[C]](#RefC). En retrospectiva, el éxito de Firebase y su servicio de base de datos en tiempo real se basó en comprender las necesidades y deseos de los usuarios, aprovechando la oportunidad para satisfacer las demandas del mercado. Por eso, si alguna vez observas a los usuarios utilizar un programa de una manera para la cual "no fue diseñado", recuerda esta historia y considera cómo podrías ofrecer una solución que responda a esa necesidad.
+En el año 2014 Firebase fue adquirida por Google, lo que permitió al servicio crecer en su infraestructura y alcance, además de colaborar con **Google Cloud Platform**, lo que les permitió a los usuarios utilizar los servicios en la nube de Google [[C]](#RefC). En retrospectiva, el éxito de Firebase y su servicio de base de datos en tiempo real se basó en comprender las necesidades y deseos de los usuarios, aprovechando la oportunidad para satisfacer las demandas del mercado. Por esto, si alguna vez observas a los usuarios utilizar un programa de una manera para la cual "no fue diseñado", recuerda esta historia y considera cómo podrías ofrecer una solución que responda a esa necesidad.
 
 ## ¿Y cómo se modela?
 
@@ -48,7 +48,7 @@ Los datos de los documentos se pueden guardar en objetos complejos dentro del mi
 ~~~json
 {
   "users": {
-    "users1": {
+    "user1": {
       "name": "Omar",
       "lastName": "Sanchez",
       "country": "Costa Rica",
@@ -70,7 +70,7 @@ Un ejemplo de la utilización de una sub-colección se muestra a continuación:
 ~~~json
 {
   "users": {
-    "users1": {
+    "user1": {
       "name": "Omar",
       "lastName": "Sanchez",
       "country": "Costa Rica",
@@ -94,7 +94,7 @@ Un ejemplo de la utilización de una sub-colección se muestra a continuación:
 
 ### Colecciones a nivel de raíz
 
-Esta es la principal manera de estructurar la información, siendo que se crean colecciones al nivel de la raíz de la base de datos que contienen conjuntos de información. Esta es una manera fácil de crear relaciones muchos a muchos y brinda herramientas para hacer consultas más complejas. Pero vuelve más compleja la base de datos y puede complicar algunos tipos de consultas. Es la manera en la que se recomienda estructurar la información, pero se debe tener en consideración las necesidades y características del sistema, para no añadir complejidad innecesaria al mismo [[F]](#RefF).
+Esta es la principal manera de estructurar la información, siendo que se crean colecciones al nivel de la raíz de la base de datos que contiene conjuntos de información. Esta es una manera fácil de crear relaciones muchos a muchos y brinda herramientas para hacer consultas más complejas. Sin embargo, esto vuelve más compleja la base de datos y puede complicar algunos tipos de consultas. De igual forma, esta es la manera en la que se recomienda estructurar la información, pero se debe tener en consideración las necesidades y características del sistema para evitar añadir complejidad innecesaria. [[F]](#RefF).
 
 Un ejemplo de cómo usar esta estructuración se muestra a continuación:
 
@@ -126,7 +126,7 @@ Un ejemplo de cómo usar esta estructuración se muestra a continuación:
 
 **Nota:** Esta sección se centra en la utilización de Firebase Realtime Database en aplicaciones web.
 
-De la misma manera en la que no existe un modelo específico para NoSQL ni para Firebase Realtime Database, no existe un lenguaje específico u homogéneo para realizar consultas, no al menos de la manera en la que estamos acostumbrados con SQL. Además, la técnica o código utilizado para realizar consultas puede variar dependiendo de cuál herramienta, tecnología o lenguaje de programación se esté utilizando, siendo que en este caso se darán los ejemplos para aplicaciones web, utilizando `javascript`.
+De la misma manera en la que no existe un modelo específico para NoSQL ni para Firebase Realtime Database, no existe un lenguaje específico u homogéneo para realizar consultas, al menos no de la manera en la que estamos acostumbrados con SQL. Además, la técnica o código utilizado para realizar consultas puede variar dependiendo de cuál herramienta, tecnología o lenguaje de programación se esté utilizando, para nuestro caso, se darán ejemplos para aplicaciones web utilizando `javascript`.
 
 ### Obtener la referencia a la base de datos
 
@@ -143,7 +143,7 @@ const MyBeautifulDatabase = getDatabase();
 
 #### Escritura básica
 
-Ahora a lo interesante, para escribir primeramente necesitaremos contar con la referencia a la base de datos y saber que la información se obtiene de manera asíncrona, sumado a que se obtiene la información al iniciar y cada vez que este cambia.
+Ahora a lo interesante, para escribir primeramente necesitaremos contar con la referencia a la base de datos y saber que la información se obtiene de manera asíncrona, sumado a que se obtiene la información al iniciar y cada vez que esta cambia.
 
 La manera más básica para escribir es utilizando la función `set()`, la cual requiere saber cuál es la ruta dentro del árbol a la colección que deseamos modificar [[G]](#RefG). Por ejemplo, si deseamos añadir un nuevo usuario llamado "Omar" con su información a la base de datos, simplemente se puede utilizar el siguiente código:
 
@@ -166,7 +166,7 @@ interactuar con ese dato en el programa; Siendo que podría ser cualquier valor 
 
 #### Escuchar eventos para obtener datos
 
-En este caso se creará un escuchador u "*observer*" que va a obtener los datos de una dirección en específico; siendo que una vez se empieza a escuchar, se realiza una lectura de los datos la primera vez y cada vez que la información cambie, por lo que se mantiene la información actualizada. Esto se puede realizar por medio de la operación `onValue()` y lo que se obtiene es una "*snapshot*" de los datos de la dirección y de todos sus hijos incluidos. En el caso de que la información no exista, al realizar la operación `val()`, esta devuelve `null` [[G]](#RefG).
+En este caso se creará un escuchador u "*observer*" que va a obtener los datos de una dirección en específico; siendo que una vez se empieza a escuchar, se realiza una lectura de los datos una primera vez y cada vez que la información cambia, de esta forma se mantiene la información actualizada. Esto se puede realizar por medio de la operación `onValue()` y lo que se obtiene es una "*snapshot*" de los datos de la dirección y de todos sus hijos incluidos. En el caso de que la información no exista, al realizar la operación `val()`, esta devuelve `null` [[G]](#RefG).
 
 ~~~js
 import { getDatabase, ref, onValue } from "firebase/database";
@@ -209,8 +209,8 @@ get(child(MyDatabase, 'users/' + someID)).then((snapshot) => {
 
 Por otro lado, se puede utilizar la opción `once()` o `onlyOnce: true` para obtener información que se encuentra en el caché, de manera automática. Eso implica que, en lugar de obtener la información más reciente de la base de datos, se utilizará la información que se encuentre en el caché del disco local.
 
-Esto puede ser de utilidad en el caso de que no se requiera los dato m�s recientes, dado que estos no cambien
-tan frecuentemente o que no se necesiten [[G]](#RefG).
+Esto puede ser de utilidad en el caso de que no se requieran los dato más recientes, dado que estos no cambien
+con tanta frecuencia o que no se necesiten [[G]](#RefG).
 
 ~~~js
 import { getDatabase, ref, onValue } from "firebase/database";
@@ -361,6 +361,58 @@ const MyDatabase = getDatabase();
 const userMessages = query(ref(MyDatabase, 'user-messages/1234567890'), orderByValue('message-date'), limitToLast(25));
 ~~~
 
+## ¿Cuáles mecanismos de optimización ofrece?
+
+Firebase Realtime Database ofrece diferentes mecanismos y herramientas de optimización para mejorar el rendimiento de las consultas y reducir los costos asociados.
+
+### Indexación de datos
+
+Firebase Realtime Database permite indexar datos para optimizar el rendimiento de las consultas  mediante la regla `.indexOn`.
+ Los índices pueden crearse en cualquier nivel del árbol de la base de datos, aunque se recomienda hacerlo en los niveles más bajos posibles para mejorar la eficiencia, dado que se obtiene la información de los "nodos hijos" de la referencia. Además, Firebase soporta índices compuestos, lo que permite realizar consultas más complejas y eficientes. Al establecer las claves que se utilizarán en las consultas, la base de datos indexará esas claves en los servidores, lo que mejora significativamente el rendimiento de las consultas a medida que la aplicación crece [[I]](#RefI).
+
+#### Indexación para optimizar la operación OrderByChild()
+
+Firebase es muy flexible en cuanto a la indexación de datos, para ilustrar un ejemplo, vamos a establecer un índice para optimizar las consultas ordenadas con la operación `orderByChild()` presentada anteriormente.
+
+Considere la siguiente estructura de datos:
+
+~~~json
+{
+  "users": {
+    "user1": {
+      "name": "Omar",
+      "lastName": "Sanchez",
+      "country": "Costa Rica",
+      "province": "Heredia",
+      "canton": "San Rafael"
+    },
+    "user2": {
+      "name": "Kenneth",
+      "lastName": "Villalobos",
+      "country": "Costa Rica",
+      "province": "San José",
+      "canton": "San José"
+    }
+  }
+}
+~~~
+
+Por defecto, Firebase indexa los datos por la clave de los usuarios (supongamos en este caso que la clave es el nombre) y optimiza las consultas para esta clave. Sin embargo, suponiendo que en nuestro contexto de aplicación, necesitamos ordenar a los usuarios por provincia o cantón, pero no por la clave de usuario, podemos establecer un índice para estos atributos. Para ello, utilizamos la regla `.indexOn` en el *Archivo de Reglas de Seguridad de la Base de Datos de Firebase*, como se muestra a continuación:
+
+~~~json
+{
+  "rules": {
+    "users": {
+      ".indexOn": ["province", "canton"]
+    }
+  }
+}
+~~~
+
+Con esta regla, Firebase indexará los datos de los usuarios por provincia y cantón. Esto permitirá realizar consultas más eficientes y rápidas, especialmente cuando se utilice la operación `orderByChild()` para ordenar los resultados basados en estos atributos. Al crear estos índices, Firebase optimiza el acceso y la recuperación de datos, reduciendo el tiempo de consulta y mejorando el rendimiento general de la base de datos [[I]](#RefI).
+
+Note además, que se está creando un *índice compuesto*, ya que se están indexando múltiples atributos en una sola regla. Esto permite realizar consultas más complejas y eficientes. Al establecer índices compuestos, se mejora significativamente el rendimiento de las consultas a medida que la aplicación crece y se manejan grandes volúmenes de datos. De igual forma se pueden establecer índices de una sola clave para optimizar consultas específicas [[I]](#RefI).
+
 ***
 
 ## Referencias
@@ -380,3 +432,5 @@ const userMessages = query(ref(MyDatabase, 'user-messages/1234567890'), orderByV
 [G] Firebase, "*Read and Write Data on the Web*", Firebase.com. [En línea]. Disponible en <span id="RefG">https://firebase.google.com/docs/database/web/read-and-write#web</span>. [Accedido: Sep. 1, 2024].
 
 [H] Firebase, "*Work with Lists of Data on the Web*", Firebase.com. [En línea]. Disponible en <span id="RefH">https://firebase.google.com/docs/database/web/lists-of-data#web_4</span>. [Accedido: Sep. 4, 2024].
+
+[I] Firebase, "*Index Your Data*", Firebase.com. [En línea]. Disponible en <span id="RefI">https://firebase.google.com/docs/database/security/indexing-data</span>. [Accedido: Sep. 5, 2024].
