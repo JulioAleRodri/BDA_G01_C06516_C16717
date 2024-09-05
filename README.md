@@ -1,2 +1,22 @@
 # BDA_G01_C06516_C16717
-Este repositorio contiene los trabajos realizados para el curso Bases de Datos Avanzadas (Grupo 01), impartido por el profesor Luis Gustavo Esquivel Quirós. Los proyectos han sido desarrollados por los estudiantes Geancarlo Rivera Hernández (C06516) y Julio Alejandro Rodríguez Salguera (C16717).
+
+Universidad de Costa Rica
+
+Facultad de Ingeniería
+
+Escuela de Ciencias de la Computación e Informática
+
+Bases de datos avanzadas (CI-0141)
+
+## Estudiantes
+
+- Geancarlo Rivera Hernández (C06516). <geancarlo.riverahernandez@ucr.ac.cr>
+- Julio Alejandro Rodríguez Salguera (C16717). <julio.rodriguezsalguera@ucr.ac.cr>
+
+## Profesor
+
+- Dr. Luis Gustavo Esquivel Quirós. <luis.esquivel@ucr.ac.cr>
+
+## Descripción
+
+Repositorio asignaciones y proyectos del curso Bases de datos avanzadas (CI-0141) de la Universidad de Costa Rica.
