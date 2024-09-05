@@ -402,7 +402,6 @@ import { getDatabase, ref, query, orderByValue } from "firebase/database";
 const MyDatabase = getDatabase();
   
 const userMessages = query(ref(MyDatabase, 'user-messages/1234567890'), orderByValue('message-date'));
-}
 ~~~
 
 #### Fitrado
@@ -425,7 +424,6 @@ import { getDatabase, ref, query, orderByValue } from "firebase/database";
 const MyDatabase = getDatabase();
   
 const userMessages = query(ref(MyDatabase, 'user-messages/1234567890'), orderByValue('message-date'), limitToLast(25));
-}
 ~~~
 
 ## Referencias
@@ -444,4 +442,4 @@ const userMessages = query(ref(MyDatabase, 'user-messages/1234567890'), orderByV
 
 [G] Firebase, "*Read and Write Data on the Web*", Firebase.com. [En línea]. Disponible en <span id="RefG"> https://firebase.google.com/docs/database/web/read-and-write#web </span>. [Accedido: Sep. 1, 2024].
 
-[H] Firebase, "*Work with Lists of Data on the Web*", Firebase.como. [En línea]. Disponible en <span id="RefH"> https://firebase.google.com/docs/database/web/lists-of-data#web_4 </span>. [Accedido: Sep. 1, 2024].
+[H] Firebase, "*Work with Lists of Data on the Web*", Firebase.como. [En línea]. Disponible en <span id="RefH"> https://firebase.google.com/docs/database/web/lists-of-data#web_4 </span>. [Accedido: Sep. 4, 2024].
