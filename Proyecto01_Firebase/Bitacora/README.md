@@ -12,4 +12,6 @@ Julio Alejandro Rodríguez Salguera [Julio]
 |   Julio   | 02/09/2024 | Se finaliza la sección de lenguaje utilizado en Firebase.
 |   Julio   | 04/09/2024 | Se realiza la sección de estructuras de datos y algoritmos de Firebase.
 | Geancarlo | 05/09/2024 | Se realizan correcciones de linter, ortografía. Se realiza sección de índices.
-| Geancarlo | 06/09/2024 | Se realiza sección de optimización y mecanismos de recuperación.
+| Geancarlo | 06/09/2024 | Se realiza sección de optimización y mecanismos de recuperación, se agrega tabla de contenidos y conexión entre documentos.
+
+[Regresar a la actividad](../FirebaseRealtimeDatabase.md)

@@ -6,9 +6,60 @@
 
 ### Autores
 
-Geancarlo Rivera Hernandez C06516
+- Geancarlo Rivera Hernandez C06516
+- Julio Alejandro Rodríguez Salguera C16717
 
-Julio Alejandro Rodríguez Salguera C16717
+#### Bitácora
+
+[Ir a la bitácora](./Bitacora/README.md)
+***
+
+### Tabla de Contenidos
+
+- [Firebase Realtime Database](#firebase-realtime-database)
+  - [Actividad para compartir conocimiento](#actividad-para-compartir-conocimiento)
+    - [Autores](#autores)
+      - [Bitácora](#bitácora)
+    - [Tabla de Contenidos](#tabla-de-contenidos)
+  - [¿Y qué es Firebase?](#y-qué-es-firebase)
+    - [Contexto](#contexto)
+    - [Historia](#historia)
+  - [¿Y cómo se modela?](#y-cómo-se-modela)
+    - [Datos anidados en un documento](#datos-anidados-en-un-documento)
+    - [Sub-colecciones](#sub-colecciones)
+    - [Colecciones a nivel de raíz](#colecciones-a-nivel-de-raíz)
+  - [¿Y cómo hago consultas?](#y-cómo-hago-consultas)
+    - [Obtener la referencia a la base de datos](#obtener-la-referencia-a-la-base-de-datos)
+    - [Escribir datos](#escribir-datos)
+      - [Escritura básica](#escritura-básica)
+    - [Leer datos](#leer-datos)
+      - [Escuchar eventos para obtener datos](#escuchar-eventos-para-obtener-datos)
+      - [Leer datos una sola vez](#leer-datos-una-sola-vez)
+      - [Leer datos una sola vez con un observador](#leer-datos-una-sola-vez-con-un-observador)
+    - [Modificar o eliminar datos](#modificar-o-eliminar-datos)
+      - [Modificar campos específicos](#modificar-campos-específicos)
+      - [Eliminar datos](#eliminar-datos)
+  - [¿Existen estructuras o algoritmos?](#existen-estructuras-o-algoritmos)
+    - [Listas](#listas)
+      - [Escuchar cambios de los nodos hijos](#escuchar-cambios-de-los-nodos-hijos)
+    - [Ordenamiento y filtrado](#ordenamiento-y-filtrado)
+      - [Ordenamiento](#ordenamiento)
+      - [Filtrado](#filtrado)
+  - [¿Cuáles mecanismos de optimización ofrece?](#cuáles-mecanismos-de-optimización-ofrece)
+    - [Indexación de datos](#indexación-de-datos)
+      - [Indexación para optimizar `OrderByChild()`](#indexación-para-optimizar-orderbychild)
+    - [Optimización de consultas](#optimización-de-consultas)
+    - [Optimización de conexiones](#optimización-de-conexiones)
+    - [División de datos en múltiples instancias (*Sharding*)](#división-de-datos-en-múltiples-instancias-sharding)
+    - [Recomendaciones adicionales de optimización](#recomendaciones-adicionales-de-optimización)
+  - [¿Qué mecanismos de recuperación y continuidad de servicio ofrece?](#qué-mecanismos-de-recuperación-y-continuidad-de-servicio-ofrece)
+    - [Gestión de presencia](#gestión-de-presencia)
+      - [Operación `onDisconnect()`](#operación-ondisconnect)
+      - [Monitorización de la conexión](#monitorización-de-la-conexión)
+      - [Timestamps](#timestamps)
+      - [Sincronización estado local y de servidor](#sincronización-estado-local-y-de-servidor)
+    - [Recuperación de datos](#recuperación-de-datos)
+  - [Referencias](#referencias)
 
 ***
 
@@ -20,10 +71,10 @@ Firebase Realtime Database es una base de datos NoSQL basada en la nube que sinc
 
 Esta plataforma ofrece las siguientes funcionalidades esenciales:
 
-* En tiempo real: Cada vez que la información es cambiada, se actualiza automáticamente para cada uno de los dispositivos conectados en cuestión de milisegundos.
-* Funciona sin conexión: No se pierde la información aunque el usuario no tenga conexión, pues los cambios se guardan en el almacenamiento del usuario, permitiendo que al momento de volver a conectarse, se sincronice toda la información de manera automática.
-* Accesible desde dispositivos clientes: Es accesible desde dispositivos móviles o navegadores, sin un servidor de aplicación.
-* Escalable entre diferentes bases de datos: Brinda servicios para dividir los datos entre distintas instancias de la base de datos [[D]](#RefD).
+- En tiempo real: Cada vez que la información es cambiada, se actualiza automáticamente para cada uno de los dispositivos conectados en cuestión de milisegundos.
+- Funciona sin conexión: No se pierde la información aunque el usuario no tenga conexión, pues los cambios se guardan en el almacenamiento del usuario, permitiendo que al momento de volver a conectarse, se sincronice toda la información de manera automática.
+- Accesible desde dispositivos clientes: Es accesible desde dispositivos móviles o navegadores, sin un servidor de aplicación.
+- Escalable entre diferentes bases de datos: Brinda servicios para dividir los datos entre distintas instancias de la base de datos [[D]](#RefD).
 
 ### Historia
 
@@ -349,11 +400,11 @@ const userMessages = query(ref(MyDatabase, 'user-messages/1234567890'), orderByV
 
 En este caso se puede realizar un filtrado para solamente tomar los datos que cumplan con ciertas características, además de que se puede combinar con el ordenamiento [[H]](#RefH). A continuación se presentan algunas de las opciones para realizar el filtrado de datos:
 
-* `limitToFirst()`: Limita la cantidad de objetos obtenidos desde el inicio de la lista de resultados.
-* `limitToLast()`: Limita la cantidad de objetos obtenidos desde el final de la lista de resultados.
-* `startAt()` y `startAfter()`: El primero devuelve elementos mayores o iguales al valor especificado, y el segundo devuelve elementos mayores, ambos según el método de ordenación elegido.
-* `endAt()` y `endBefore()`: El primero devuelve elementos menores o iguales al valor especificado, y el segundo devuelve elementos menores, ambos según el método de ordenación elegido.
-* `equalTo()`: Devuelve una lista de elementos cuyo valor sea igual al valor específico dado.
+- `limitToFirst()`: Limita la cantidad de objetos obtenidos desde el inicio de la lista de resultados.
+- `limitToLast()`: Limita la cantidad de objetos obtenidos desde el final de la lista de resultados.
+- `startAt()` y `startAfter()`: El primero devuelve elementos mayores o iguales al valor especificado, y el segundo devuelve elementos mayores, ambos según el método de ordenación elegido.
+- `endAt()` y `endBefore()`: El primero devuelve elementos menores o iguales al valor especificado, y el segundo devuelve elementos menores, ambos según el método de ordenación elegido.
+- `equalTo()`: Devuelve una lista de elementos cuyo valor sea igual al valor específico dado.
 
 ~~~js
 import { getDatabase, ref, query, orderByValue } from "firebase/database";
@@ -568,3 +619,7 @@ https://firebase.google.com/docs/database/usage/optimize</span>. [Accedido: Sep.
 [M] Firebase, "*Automated Backups*", Firebase.com. [En línea]. Disponible en <span id="RefM">https://firebase.google.com/docs/database/backups</span>. [Accedido: Sep. 6, 2024].
 
 [N] Firebase, "*Extend Realtime Database with Cloud Functions*", Firebase.com. [En línea]. Disponible en <span id="RefN">https://firebase.google.com/docs/database/extend-with-functions?gen=2nd</span>. [Accedido: Sep. 6, 2024].
+
+***
+
+[Regresar a la página principal](../README.md)

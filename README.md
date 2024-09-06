@@ -20,3 +20,7 @@ Bases de datos avanzadas (CI-0141)
 ## Descripción
 
 Repositorio asignaciones y proyectos del curso Bases de datos avanzadas (CI-0141) de la Universidad de Costa Rica.
+
+### Actividades
+
+- [Actividad Compartir Conocimiento - Firebase](./Proyecto01_Firebase/FirebaseRealtimeDatabase.md)
