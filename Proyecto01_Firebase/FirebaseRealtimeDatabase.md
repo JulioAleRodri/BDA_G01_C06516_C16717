@@ -372,7 +372,7 @@ Firebase Realtime Database ofrece diferentes mecanismos y herramientas de optimi
 Firebase Realtime Database permite indexar datos para optimizar el rendimiento de las consultas  mediante la regla `.indexOn`.
  Los índices pueden crearse en cualquier nivel del árbol de la base de datos, aunque se recomienda hacerlo en los niveles más bajos posibles para mejorar la eficiencia, dado que se obtiene la información de los "nodos hijos" de la referencia. Además, Firebase soporta índices compuestos, lo que permite realizar consultas más complejas y eficientes. Al establecer las claves que se utilizarán en las consultas, la base de datos indexará esas claves en los servidores, lo que mejora significativamente el rendimiento de las consultas a medida que la aplicación crece [[I]](#RefI).
 
-#### Indexación para optimizar OrderByChild()
+#### Indexación para optimizar `OrderByChild()`
 
 Firebase es muy flexible en cuanto a la indexación de datos, para ilustrar un ejemplo, vamos a establecer un índice para optimizar las consultas ordenadas con la operación `orderByChild()` presentada anteriormente.
 
@@ -440,6 +440,102 @@ Además de las optimizaciones mencionadas, Firebase Realtime Database ofrece una
 3. **Optimización de rendimiento:** Limitar las descargas de datos utilizando reglas basadas en consultas y filtrado tales como `limitToFirst()` o `limitToLast()` vistas previamente, restringe la cantidad de información leída y descargada en el cliente, lo que mejora el rendimiento y reduce los costos. Adicionalmente, es útil reutilizar sesiones SSL para disminuir el overhead de cifrado.
 4. **Limpieza de datos:** Eliminar datos obsoletos, duplicados o innecesarios de la base de datos ayuda a mantener un rendimiento óptimo y a reducir la carga. Es recomendable programar tareas de limpieza periódicas para mantener la base de datos ordenada y eficiente.
 
+## ¿Qué mecanismos de recuperación y continuidad de servicio ofrece?
+
+**Nota:** Esta sección se centra en la utilización de Firebase Realtime Database en aplicaciones web con JavaScript.
+
+Firebase Realtime Database ofrece mecanismos de recuperación y continuidad de servicio para garantizar la disponibilidad y confiabilidad de los datos en caso de fallos o interrupciones. Principalmente directivas para trabajar aún cuando se pierda la conexión a internet. A continuación se presentan algunos de los mecanismos más importantes utilizando `JavaScript.
+
+### Gestión de presencia
+
+#### Operación `onDisconnect()`
+
+Firebase ofrece el método `onDisconnect()` para gestionar la presencia de los usuarios, permitiendo programar acciones automáticas, como eliminar o actualizar datos, cuando un usuario se desconecta, ya sea de forma intencional o por fallos inesperados. Esto garantiza que operaciones de limpieza, actualización, o cualquier acción definida se ejecute incluso en casos de fallas de red o cierres inesperados del cliente [[K]](#RefK).
+
+A continuación se muestra un ejemplo simple de cómo utilizar `onDisconnect()` para emitir un mensaje de salida cuando un usuario se desconecta de la aplicación:
+
+~~~js
+import { getDatabase, ref, onDisconnect } from "firebase/database";
+
+const db = getDatabase();
+const presenceRef = ref(db, "disconnectMessage");
+
+onDisconnect(presenceRef).set("User has disconnected");
+
+~~~
+
+En este ejemplo, cuando un usuario se desconecta de la aplicación, Firebase emitirá un mensaje de salida que se almacenará en la base de datos en la referencia `disconnectMessage`. De esta forma se tiene un log de los usuarios que se desconectan y se podría realizar un seguimiento de la presencia de los usuarios en la aplicación y actuar en consecuencia.
+
+#### Monitorización de la conexión
+
+Firebase Realtime Database proporciona un nodo especial en la base de datos (`/.info/connected`) para monitorear si un cliente está conectado o desconectado del servidor. Al utilizar este nodo, la aplicación puede detectar cambios en el estado de conexión y reaccionar de manera adecuada. Es útil para implementar funcionalidades que dependen del estado en línea o fuera de línea del cliente [[K]](#RefK).
+
+A continuación se muestra un ejemplo de cómo utilizar el nodo `/.info/connected` para monitorear el estado de conexión de un cliente:
+
+~~~js
+import { getDatabase, ref, onValue } from "firebase/database";
+
+const db = getDatabase();
+const connectedRef = ref(db, ".info/connected");
+
+onValue(connectedRef, (snap) => {
+  if (snap.val() === true) {
+    console.log("Connected");
+  } else {
+    console.log("Disconnected");
+  }
+});
+~~~
+
+En este ejemplo, la aplicación detecta cuando el cliente se conecta o desconecta y registra el estado en la consola. Esto permite a la aplicación ajustar su comportamiento en función del estado de conexión del cliente. Esto funciona gracias a que `/.info/connected` retorna una referencia con un valor booleano correspondiente al estado de conexión del cliente.
+
+#### Timestamps
+
+Firebase también ofrece la capacidad de insertar marcas de tiempo generadas en el servidor como parte de los datos almacenados. Este mecanismo permite registrar la hora exacta en que un cliente se desconecta o realiza una acción, usando `serverTimestamp()`. Esto es especialmente útil para manejar eventos como la última vez que un usuario estuvo en línea [[K]](#RefK).
+
+A continuación se muestra un ejemplo de cómo utilizar `serverTimestamp()` para registrar la hora exacta en que un usuario se desconecta:
+
+~~~js
+import { getDatabase, ref, onDisconnect, serverTimestamp } from "firebase/database";
+
+const db = getDatabase();
+const lastOnlineRef = ref(db, "users/omar/lastOnline");
+
+onDisconnect(lastOnlineRef).set(serverTimestamp());
+~~~
+
+En este ejemplo, la base de datos registra la última vez que el usuario estuvo en línea cuando el cliente se desconecta. La marca de tiempo generada por el servidor asegura que el valor es preciso, independientemente del tiempo local del cliente. Note además que `serverTimestamp()` se está utilizando la operación `onDisconnect()` para activar la escritura de la marca de tiempo en la base de datos cuando el cliente se desconecta.
+
+#### Sincronización estado local y de servidor
+
+Gracias a los mecanismos previamente vistos, Firebase Realtime Database permite mantener la sincronización entre el estado local y el estado del servidor, incluso en situaciones de desconexión. Esto garantiza que los datos se actualicen y sincronicen correctamente, incluso si el cliente se desconecta temporalmente. Al utilizar operaciones en conjunto como `onDisconnect()`, `serverTimestamp()` `.info/connected`, la aplicación puede mantener la integridad de los datos y garantizar que los cambios se reflejen correctamente [[K]](#RefK).
+
+A continuación se muestra un ejemplo de cómo gestionar la sincronización entre el estado local y el estado del servidor:
+
+~~~js
+import { getDatabase, ref, onValue, set, serverTimestamp } from "firebase/database";
+
+const db = getDatabase();
+const connectedRef = ref(db, '.info/connected');
+const myConnectionsRef = ref(db, 'users/omar/connections');
+const lastOnlineRef = ref(db, 'users/omar/lastOnline');
+
+onValue(connectedRef, (snap) => {
+  if (snap.val() === true) {
+    const con = push(myConnectionsRef);
+    set(con, true);
+    onDisconnect(con).remove();
+    onDisconnect(lastOnlineRef).set(serverTimestamp());
+  }
+});
+~~~
+
+Este ejemplo demuestra un sistema de presencia donde se registra el estado de conexión del usuario y se eliminan sus conexiones cuando se desconecta. Además, se actualiza la hora de la última conexión. Este mecanismo asegura que el estado entre el cliente y el servidor esté siempre sincronizado.
+
+### Recuperación de datos
+
+En cuando al respaldo y recuperación de datos, Firebase Realtime Database proporciona replicación automática de datos en múltiples ubicaciones para asegurar alta disponibilidad y durabilidad, incluso durante fallos en la infraestructura. Aunque no ofrece un esquema de replicación tan detallado como Cloud Firestore, que permite personalizar, programar copias de seguridad y otras características [[L]](#RefL), la replicación automática en Realtime Database asegura que los datos sean accesibles y protegidos. Para realizar copias de seguridad en Firebase Realtime Database, se pueden ejecutar manualmente, utilizando herramientas o scripts personalizados para exportar y restaurar datos. Además se pueden programar respaldos por periodos de tiempo según se requiera [[M]](#RefN). También es posible integrar Realtime Database con Cloud Firestore u otros servicios en la nube para aprovechar funciones avanzadas de copias de seguridad y recuperación [[N]](#RefN).
+
 ***
 
 ## Referencias
@@ -463,4 +559,12 @@ Además de las optimizaciones mencionadas, Firebase Realtime Database ofrece una
 [I] Firebase, "*Index Your Data*", Firebase.com. [En línea]. Disponible en <span id="RefI">https://firebase.google.com/docs/database/security/indexing-data</span>. [Accedido: Sep. 5, 2024].
 
 [J] Firebase, "*Optimize Database Performance*", Firebase.com. [En línea]. Disponible en <span id="RefJ">
-https://firebase.google.com/docs/database/usage/optimize</span>. [Accedido: Sep. 5, 2024].
+https://firebase.google.com/docs/database/usage/optimize</span>. [Accedido: Sep. 6, 2024].
+
+[K] Firebase, "*Enabling Offline Capabilities*", Firebase.com. [En línea]. Disponible en <span id="RefK">https://firebase.google.com/docs/database/web/offline-capabilities</span>. [Accedido: Sep. 6, 2024].
+
+[L] Firebase, "*Disaster recovery planning*", Firebase.com. [En línea]. Disponible en <span id="RefL">https://firebase.google.com/docs/firestore/disaster-recovery</span>. [Accedido: Sep. 6, 2024].
+
+[M] Firebase, "*Automated Backups*", Firebase.com. [En línea]. Disponible en <span id="RefM">https://firebase.google.com/docs/database/backups</span>. [Accedido: Sep. 6, 2024].
+
+[N] Firebase, "*Extend Realtime Database with Cloud Functions*", Firebase.com. [En línea]. Disponible en <span id="RefN">https://firebase.google.com/docs/database/extend-with-functions?gen=2nd</span>. [Accedido: Sep. 6, 2024].
