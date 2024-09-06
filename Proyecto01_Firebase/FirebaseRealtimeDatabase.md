@@ -10,6 +10,8 @@ Geancarlo Rivera Hernandez C06516
 
 Julio Alejandro Rodríguez Salguera C16717
 
+***
+
 ## ¿Y qué es Firebase?
 
 ### Contexto
@@ -370,7 +372,7 @@ Firebase Realtime Database ofrece diferentes mecanismos y herramientas de optimi
 Firebase Realtime Database permite indexar datos para optimizar el rendimiento de las consultas  mediante la regla `.indexOn`.
  Los índices pueden crearse en cualquier nivel del árbol de la base de datos, aunque se recomienda hacerlo en los niveles más bajos posibles para mejorar la eficiencia, dado que se obtiene la información de los "nodos hijos" de la referencia. Además, Firebase soporta índices compuestos, lo que permite realizar consultas más complejas y eficientes. Al establecer las claves que se utilizarán en las consultas, la base de datos indexará esas claves en los servidores, lo que mejora significativamente el rendimiento de las consultas a medida que la aplicación crece [[I]](#RefI).
 
-#### Indexación para optimizar la operación OrderByChild()
+#### Indexación para optimizar OrderByChild()
 
 Firebase es muy flexible en cuanto a la indexación de datos, para ilustrar un ejemplo, vamos a establecer un índice para optimizar las consultas ordenadas con la operación `orderByChild()` presentada anteriormente.
 
@@ -413,6 +415,31 @@ Con esta regla, Firebase indexará los datos de los usuarios por provincia y can
 
 Note además, que se está creando un *índice compuesto*, ya que se están indexando múltiples atributos en una sola regla. Esto permite realizar consultas más complejas y eficientes. Al establecer índices compuestos, se mejora significativamente el rendimiento de las consultas a medida que la aplicación crece y se manejan grandes volúmenes de datos. De igual forma se pueden establecer índices de una sola clave para optimizar consultas específicas [[I]](#RefI).
 
+### Optimización de consultas
+
+Firebase Realtime Database ofrece varias optimizaciones para mejorar el rendimiento de las consultas. Por ejemplo, la operación `orderByChild()` como ya se vió anteriormente, permite utilizar índices, lo que acelera y hace más eficiente la búsqueda de datos. Además, el uso de reglas basadas en consultas (*Query-based Rules*) permiten filtrar los datos antes de que sean descargados, reduciendo la cantidad de información que se transfiere y procesa en el cliente, esto a su vez optimiza la eficiencia y disminuye los costos. Un ejemplo es la restricción `query.limitToFirst`, que limita la cantidad de datos descargados, mejorando el rendimiento y reduciendo costos [[J]](#RefJ).
+
+### Optimización de conexiones
+
+Firebase optimiza las conexiones permitiendo el uso de [SDKs](https://aws.amazon.com/what-is/sdk/?nc1=h_ls) (Software Development Kits) nativos en lugar de utilizar [APIs REST](https://aws.amazon.com/what-is/restful-api/?nc1=h_ls). Los SDKs nativos permiten mantener una conexión persistente con la base de datos, gracias a esto se reducen los costos de estar realizando conexiones y desconexiones constantes, ya que implican costos de cifrado SSL y carga en la base de datos debido a las solicitudes REST, como `Get` y `Put`, que son de corta duración. Además, Firebase recomienda que si es necesario usar la API REST que ofrece, es mejor utilizarla con *HTTP Keep-Alive*, que permite mantener una conexión abierta o eventos enviados por el servidor, lo que reduce los costos asociados con los intercambios de SSL. De igual forma, la recomendación principal es utilizar los SDKs nativos para aprovechar al máximo las ventajas de Firebase [[J]](#RefJ).
+
+### División de datos en múltiples instancias (*Sharding*)
+
+Firebase Realtime Database permite dividir los datos en múltiples instancias, lo que se conoce como *sharding*. Esta técnica permite escalar horizontalmente la base de datos, distribuyendo los datos en múltiples instancias para mejorar el rendimiento y la escalabilidad. Aplicar  esta estrategia permite obtener tres beneficios clave  [[J]](#RefJ):
+
+1. Aumenta el número total de conexiones activas simultáneas permitidas en la aplicación al distribuirlas entre diferentes instancias de bases de datos.
+2. Equilibra la carga de trabajo entre las instancias mejorando el rendimiento y la capacidad de respuesta de la base de datos.
+3. Facilita la restricción de acceso, permitiendo que solo los usuarios autorizados accedan a instancias específicas de la base de datos, lo que mejora la seguridad, reduce la latencia y protege la privacidad de los datos.
+
+### Recomendaciones adicionales de optimización
+
+Además de las optimizaciones mencionadas, Firebase Realtime Database ofrece una serie de recomendaciones adicionales para mejorar el rendimiento y la eficiencia de las consultas de sus bases de datos. Algunas de estas recomendaciones incluyen [[J]](#RefJ):
+
+1. **Estructuración eficiente de los datos:** Es recomendable mantener la estructura lo más plana posible para minimizar la cantidad de datos innecesarios que se descargan. Además, agrupar múltiples actualizaciones en una sola operación ayuda a optimizar el uso de la base de datos.
+2. **Control de acceso y seguridad:** Es fundamental implementar reglas de seguridad que protejan el acceso a los datos y eviten operaciones no autorizadas. Esto no solo reduce la exposición de la base de datos, sino también la carga que esta debe manejar.
+3. **Optimización de rendimiento:** Limitar las descargas de datos utilizando reglas basadas en consultas y filtrado tales como `limitToFirst()` o `limitToLast()` vistas previamente, restringe la cantidad de información leída y descargada en el cliente, lo que mejora el rendimiento y reduce los costos. Adicionalmente, es útil reutilizar sesiones SSL para disminuir el overhead de cifrado.
+4. **Limpieza de datos:** Eliminar datos obsoletos, duplicados o innecesarios de la base de datos ayuda a mantener un rendimiento óptimo y a reducir la carga. Es recomendable programar tareas de limpieza periódicas para mantener la base de datos ordenada y eficiente.
+
 ***
 
 ## Referencias
@@ -434,3 +461,6 @@ Note además, que se está creando un *índice compuesto*, ya que se están inde
 [H] Firebase, "*Work with Lists of Data on the Web*", Firebase.com. [En línea]. Disponible en <span id="RefH">https://firebase.google.com/docs/database/web/lists-of-data#web_4</span>. [Accedido: Sep. 4, 2024].
 
 [I] Firebase, "*Index Your Data*", Firebase.com. [En línea]. Disponible en <span id="RefI">https://firebase.google.com/docs/database/security/indexing-data</span>. [Accedido: Sep. 5, 2024].
+
+[J] Firebase, "*Optimize Database Performance*", Firebase.com. [En línea]. Disponible en <span id="RefJ">
+https://firebase.google.com/docs/database/usage/optimize</span>. [Accedido: Sep. 5, 2024].
