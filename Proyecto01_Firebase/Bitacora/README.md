@@ -14,5 +14,6 @@ Julio Alejandro Rodríguez Salguera [Julio]
 | Geancarlo | 05/09/2024 | Se realizan correcciones de linter, ortografía. Se realiza sección de índices.
 | Geancarlo | 06/09/2024 | Se realiza sección de optimización y mecanismos de recuperación, se agrega tabla de contenidos y conexión entre documentos.
 | Geancarlo | 07/09/2024 | Se agrega sección de conclusiones.
+|   Julio   | 08/09/2024 | Se realizan pequeñas correcciones y se ajustan las referencias.
 
 [Regresar a la actividad](../FirebaseRealtimeDatabase.md)
