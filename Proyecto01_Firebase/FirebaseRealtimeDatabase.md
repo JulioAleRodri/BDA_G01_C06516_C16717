@@ -59,6 +59,7 @@
       - [Timestamps](#timestamps)
       - [Sincronización estado local y de servidor](#sincronización-estado-local-y-de-servidor)
     - [Recuperación de datos](#recuperación-de-datos)
+  - [Conclusiones](#conclusiones)
   - [Referencias](#referencias)
 
 ***
@@ -586,6 +587,10 @@ Este ejemplo demuestra un sistema de presencia donde se registra el estado de co
 ### Recuperación de datos
 
 En cuando al respaldo y recuperación de datos, Firebase Realtime Database proporciona replicación automática de datos en múltiples ubicaciones para asegurar alta disponibilidad y durabilidad, incluso durante fallos en la infraestructura. Aunque no ofrece un esquema de replicación tan detallado como Cloud Firestore, que permite personalizar, programar copias de seguridad y otras características [[L]](#RefL), la replicación automática en Realtime Database asegura que los datos sean accesibles y protegidos. Para realizar copias de seguridad en Firebase Realtime Database, se pueden ejecutar manualmente, utilizando herramientas o scripts personalizados para exportar y restaurar datos. Además se pueden programar respaldos por periodos de tiempo según se requiera [[M]](#RefN). También es posible integrar Realtime Database con Cloud Firestore u otros servicios en la nube para aprovechar funciones avanzadas de copias de seguridad y recuperación [[N]](#RefN).
+
+## Conclusiones
+
+Firebase Realtime Database es una base de datos en tiempo real que ofrece una estructura de datos flexible y escalable, ideal para aplicaciones web y móviles que requieren sincronización en tiempo real y alta disponibilidad. La estructura de árbol JSON permite organizar los datos de manera jerárquica y eficiente, facilitando la gestión y consulta de información. La base de datos ofrece mecanismos de optimización, recuperación y continuidad de servicio para garantizar el rendimiento, la integridad y la disponibilidad de los datos. Al utilizar las herramientas y recomendaciones proporcionadas por Firebase, los desarrolladores pueden crear aplicaciones robustas y eficientes que respondan a las necesidades de los usuarios y se adapten a los cambios en el entorno de desarrollo.
 
 ***
 
