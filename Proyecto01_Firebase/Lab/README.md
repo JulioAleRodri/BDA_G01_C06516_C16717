@@ -2,9 +2,9 @@
 
 ## Instrucciones
 
-Siga los siguientes pasos y tome evidencia (screenshoots) de la realización y resultado de cada uno:
+Siga los siguientes pasos y tome evidencia (screenshots) de la realización y resultado de cada uno:
 
-1. **Ver y seguir los pasos del video [*insertar video*] para configurar el proyecto de Firebase.**
+1. **Ver y seguir los pasos del video [LabFirebase](https://youtu.be/S8OgIEBITB0) para configurar el proyecto de Firebase.**
 2. **Crear múltiples registros en la base:**
    - Crear una función que inserte `n` elementos (al menos 5) de lo que quiera (por ejemplo, pueden ser productos). Cada registro debe tener al menos tres propiedades y una de ellas debe ser numérica (por ejemplo, para producto pueden ser: nombre, categoría y precio).
 3. **Leer registros:**

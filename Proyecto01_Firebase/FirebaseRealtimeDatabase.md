@@ -12,6 +12,10 @@
 #### Bitácora
 
 [Ir a la bitácora](./Bitacora/README.md)
+
+#### Laboratorio
+
+[Ir al laboratorio](./Lab/README.md)
 ***
 
 ### Tabla de Contenidos
@@ -20,6 +24,7 @@
   - [Actividad para compartir conocimiento](#actividad-para-compartir-conocimiento)
     - [Autores](#autores)
       - [Bitácora](#bitácora)
+      - [Laboratorio](#laboratorio)
     - [Tabla de Contenidos](#tabla-de-contenidos)
   - [¿Y qué es Firebase?](#y-qué-es-firebase)
     - [Contexto](#contexto)
@@ -632,5 +637,7 @@ Firebase Realtime Database es una base de datos en tiempo real que ofrece una es
 [14] Firebase, "*Extend Realtime Database with Cloud Functions*", Firebase.com. [En línea]. Disponible en <span id="Ref14">https://firebase.google.com/docs/database/extend-with-functions?gen=2nd</span>. [Accedido: Sep. 6, 2024].
 
 ***
+
+[Regresar al inicio del documento](#firebase-realtime-database)
 
 [Regresar a la página principal](../README.md)
