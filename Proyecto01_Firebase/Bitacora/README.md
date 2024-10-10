@@ -15,6 +15,9 @@ Julio Alejandro Rodríguez Salguera [Julio]
 | Geancarlo | 06/09/2024 | Se realiza sección de optimización y mecanismos de recuperación, se agrega tabla de contenidos y conexión entre documentos.
 | Geancarlo | 07/09/2024 | Se agrega sección de conclusiones.
 |   Julio   | 08/09/2024 | Se realizan pequeñas correcciones y se ajustan las referencias.
+| Geancarlo | 10/09/2024 | Se inicia con la grabación del video para el laboratorio.
+| Geancarlo | 12/09/2024 | Se continua con la grabación del video para el laboratorio.
+| Geancarlo | 14/09/2024 | Se agrega edición al video y se sube a Youtube.
 | Geancarlo | 18/09/2024 | Se agregan instrucciones del laboratorio.
 |   Julio   | 21/09/2024 | Se inicia el desarrollo de la presentación.
 |   Julio   | 22/09/2024 | Se continúa el desarrollo de la presentación.
