@@ -16,5 +16,8 @@ Julio Alejandro Rodríguez Salguera [Julio]
 | Geancarlo | 07/09/2024 | Se agrega sección de conclusiones.
 |   Julio   | 08/09/2024 | Se realizan pequeñas correcciones y se ajustan las referencias.
 | Geancarlo | 18/09/2024 | Se agregan instrucciones del laboratorio.
+|   Julio   | 21/09/2024 | Se inicia el desarrollo de la presentación.
+|   Julio   | 22/09/2024 | Se continúa el desarrollo de la presentación.
+|   Julio   | 23/09/2024 | Se finaliza el desarrollo de la presentación.
 
 [Regresar a la actividad](../FirebaseRealtimeDatabase.md)
